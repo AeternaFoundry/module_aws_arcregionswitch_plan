@@ -42,6 +42,20 @@ Optional:
                         - routing_control_arn (required)
                         - state (required)
                 - timeout_minutes (optional)
+            - aurora_provisioned_scaling_config (optional, block):
+                - cross_account_role (optional)
+                - external_id (optional)
+                - global_cluster_identifier (required)
+                - instance_arns (required)
+                - region_database_cluster_arns (required)
+                - timeout_minutes (optional)
+            - aurora_serverless_scaling_config (optional, block):
+                - cross_account_role (optional)
+                - external_id (optional)
+                - global_cluster_identifier (required)
+                - region_database_cluster_arns (required)
+                - target_percent (optional)
+                - timeout_minutes (optional)
             - custom_action_lambda_config (optional, block):
                 - lambda (optional, block):
                     - arn (required)
@@ -116,7 +130,26 @@ Optional:
                 - timeout_minutes (optional)
                 - ungraceful (optional, block):
                     - ungraceful (required)
+            - lambda_event_source_mapping_config (optional, block):
+                - action (required)
+                - region_event_source_mapping (optional, block):
+                    - arn (required)
+                    - cross_account_role (optional)
+                    - external_id (optional)
+                    - region (required)
+                - timeout_minutes (optional)
+                - ungraceful (optional, block):
+                    - behavior (required)
             - name (required)
+            - neptune_global_database_config (optional, block):
+                - behavior (required)
+                - cross_account_role (optional)
+                - external_id (optional)
+                - global_cluster_identifier (required)
+                - region_database_cluster_arns (required)
+                - timeout_minutes (optional)
+                - ungraceful (optional, block):
+                    - ungraceful (required)
             - parallel_config (optional, block):
                 - step (optional, block):
                     - arc_routing_control_config (optional, block):
@@ -127,6 +160,20 @@ Optional:
                             - routing_control (optional, block):
                                 - routing_control_arn (required)
                                 - state (required)
+                        - timeout_minutes (optional)
+                    - aurora_provisioned_scaling_config (optional, block):
+                        - cross_account_role (optional)
+                        - external_id (optional)
+                        - global_cluster_identifier (required)
+                        - instance_arns (required)
+                        - region_database_cluster_arns (required)
+                        - timeout_minutes (optional)
+                    - aurora_serverless_scaling_config (optional, block):
+                        - cross_account_role (optional)
+                        - external_id (optional)
+                        - global_cluster_identifier (required)
+                        - region_database_cluster_arns (required)
+                        - target_percent (optional)
                         - timeout_minutes (optional)
                     - custom_action_lambda_config (optional, block):
                         - lambda (optional, block):
@@ -202,7 +249,26 @@ Optional:
                         - timeout_minutes (optional)
                         - ungraceful (optional, block):
                             - ungraceful (required)
+                    - lambda_event_source_mapping_config (optional, block):
+                        - action (required)
+                        - region_event_source_mapping (optional, block):
+                            - arn (required)
+                            - cross_account_role (optional)
+                            - external_id (optional)
+                            - region (required)
+                        - timeout_minutes (optional)
+                        - ungraceful (optional, block):
+                            - behavior (required)
                     - name (required)
+                    - neptune_global_database_config (optional, block):
+                        - behavior (required)
+                        - cross_account_role (optional)
+                        - external_id (optional)
+                        - global_cluster_identifier (required)
+                        - region_database_cluster_arns (required)
+                        - timeout_minutes (optional)
+                        - ungraceful (optional, block):
+                            - ungraceful (required)
                     - rds_create_cross_region_read_replica_config (optional, block):
                         - cross_account_role (optional)
                         - db_instance_arn_map (required)
@@ -303,6 +369,22 @@ EOT
           })))
           timeout_minutes = optional(number)
         })))
+        aurora_provisioned_scaling_config = optional(list(object({
+          cross_account_role           = optional(string)
+          external_id                  = optional(string)
+          global_cluster_identifier    = string
+          instance_arns                = map(string)
+          region_database_cluster_arns = map(string)
+          timeout_minutes              = optional(number)
+        })))
+        aurora_serverless_scaling_config = optional(list(object({
+          cross_account_role           = optional(string)
+          external_id                  = optional(string)
+          global_cluster_identifier    = string
+          region_database_cluster_arns = map(string)
+          target_percent               = optional(number)
+          timeout_minutes              = optional(number)
+        })))
         custom_action_lambda_config = optional(list(object({
           lambda = optional(list(object({
             arn                = string
@@ -397,7 +479,31 @@ EOT
             ungraceful = string
           })))
         })))
+        lambda_event_source_mapping_config = optional(list(object({
+          action = string
+          region_event_source_mapping = optional(list(object({
+            arn                = string
+            cross_account_role = optional(string)
+            external_id        = optional(string)
+            region             = string
+          })))
+          timeout_minutes = optional(number)
+          ungraceful = optional(list(object({
+            behavior = string
+          })))
+        })))
         name = string
+        neptune_global_database_config = optional(list(object({
+          behavior                     = string
+          cross_account_role           = optional(string)
+          external_id                  = optional(string)
+          global_cluster_identifier    = string
+          region_database_cluster_arns = map(string)
+          timeout_minutes              = optional(number)
+          ungraceful = optional(list(object({
+            ungraceful = string
+          })))
+        })))
         parallel_config = optional(list(object({
           step = optional(list(object({
             arc_routing_control_config = optional(list(object({
@@ -411,6 +517,22 @@ EOT
                 })))
               })))
               timeout_minutes = optional(number)
+            })))
+            aurora_provisioned_scaling_config = optional(list(object({
+              cross_account_role           = optional(string)
+              external_id                  = optional(string)
+              global_cluster_identifier    = string
+              instance_arns                = map(string)
+              region_database_cluster_arns = map(string)
+              timeout_minutes              = optional(number)
+            })))
+            aurora_serverless_scaling_config = optional(list(object({
+              cross_account_role           = optional(string)
+              external_id                  = optional(string)
+              global_cluster_identifier    = string
+              region_database_cluster_arns = map(string)
+              target_percent               = optional(number)
+              timeout_minutes              = optional(number)
             })))
             custom_action_lambda_config = optional(list(object({
               lambda = optional(list(object({
@@ -506,7 +628,31 @@ EOT
                 ungraceful = string
               })))
             })))
+            lambda_event_source_mapping_config = optional(list(object({
+              action = string
+              region_event_source_mapping = optional(list(object({
+                arn                = string
+                cross_account_role = optional(string)
+                external_id        = optional(string)
+                region             = string
+              })))
+              timeout_minutes = optional(number)
+              ungraceful = optional(list(object({
+                behavior = string
+              })))
+            })))
             name = string
+            neptune_global_database_config = optional(list(object({
+              behavior                     = string
+              cross_account_role           = optional(string)
+              external_id                  = optional(string)
+              global_cluster_identifier    = string
+              region_database_cluster_arns = map(string)
+              timeout_minutes              = optional(number)
+              ungraceful = optional(list(object({
+                ungraceful = string
+              })))
+            })))
             rds_create_cross_region_read_replica_config = optional(list(object({
               cross_account_role  = optional(string)
               db_instance_arn_map = map(string)

@@ -84,6 +84,28 @@ resource "aws_arcregionswitch_plan" "arcregionswitch_plans" {
               timeout_minutes = arc_routing_control_config.value.timeout_minutes
             }
           }
+          dynamic "aurora_provisioned_scaling_config" {
+            for_each = step.value.aurora_provisioned_scaling_config != null ? step.value.aurora_provisioned_scaling_config : []
+            content {
+              cross_account_role           = aurora_provisioned_scaling_config.value.cross_account_role
+              external_id                  = aurora_provisioned_scaling_config.value.external_id
+              global_cluster_identifier    = aurora_provisioned_scaling_config.value.global_cluster_identifier
+              instance_arns                = aurora_provisioned_scaling_config.value.instance_arns
+              region_database_cluster_arns = aurora_provisioned_scaling_config.value.region_database_cluster_arns
+              timeout_minutes              = aurora_provisioned_scaling_config.value.timeout_minutes
+            }
+          }
+          dynamic "aurora_serverless_scaling_config" {
+            for_each = step.value.aurora_serverless_scaling_config != null ? step.value.aurora_serverless_scaling_config : []
+            content {
+              cross_account_role           = aurora_serverless_scaling_config.value.cross_account_role
+              external_id                  = aurora_serverless_scaling_config.value.external_id
+              global_cluster_identifier    = aurora_serverless_scaling_config.value.global_cluster_identifier
+              region_database_cluster_arns = aurora_serverless_scaling_config.value.region_database_cluster_arns
+              target_percent               = aurora_serverless_scaling_config.value.target_percent
+              timeout_minutes              = aurora_serverless_scaling_config.value.timeout_minutes
+            }
+          }
           dynamic "custom_action_lambda_config" {
             for_each = step.value.custom_action_lambda_config != null ? step.value.custom_action_lambda_config : []
             content {
@@ -238,7 +260,46 @@ resource "aws_arcregionswitch_plan" "arcregionswitch_plans" {
               }
             }
           }
+          dynamic "lambda_event_source_mapping_config" {
+            for_each = step.value.lambda_event_source_mapping_config != null ? step.value.lambda_event_source_mapping_config : []
+            content {
+              action = lambda_event_source_mapping_config.value.action
+              dynamic "region_event_source_mapping" {
+                for_each = lambda_event_source_mapping_config.value.region_event_source_mapping != null ? lambda_event_source_mapping_config.value.region_event_source_mapping : []
+                content {
+                  arn                = region_event_source_mapping.value.arn
+                  cross_account_role = region_event_source_mapping.value.cross_account_role
+                  external_id        = region_event_source_mapping.value.external_id
+                  region             = region_event_source_mapping.value.region
+                }
+              }
+              timeout_minutes = lambda_event_source_mapping_config.value.timeout_minutes
+              dynamic "ungraceful" {
+                for_each = lambda_event_source_mapping_config.value.ungraceful != null ? lambda_event_source_mapping_config.value.ungraceful : []
+                content {
+                  behavior = ungraceful.value.behavior
+                }
+              }
+            }
+          }
           name = step.value.name
+          dynamic "neptune_global_database_config" {
+            for_each = step.value.neptune_global_database_config != null ? step.value.neptune_global_database_config : []
+            content {
+              behavior                     = neptune_global_database_config.value.behavior
+              cross_account_role           = neptune_global_database_config.value.cross_account_role
+              external_id                  = neptune_global_database_config.value.external_id
+              global_cluster_identifier    = neptune_global_database_config.value.global_cluster_identifier
+              region_database_cluster_arns = neptune_global_database_config.value.region_database_cluster_arns
+              timeout_minutes              = neptune_global_database_config.value.timeout_minutes
+              dynamic "ungraceful" {
+                for_each = neptune_global_database_config.value.ungraceful != null ? neptune_global_database_config.value.ungraceful : []
+                content {
+                  ungraceful = ungraceful.value.ungraceful
+                }
+              }
+            }
+          }
           dynamic "parallel_config" {
             for_each = step.value.parallel_config != null ? step.value.parallel_config : []
             content {
@@ -264,6 +325,28 @@ resource "aws_arcregionswitch_plan" "arcregionswitch_plans" {
                         }
                       }
                       timeout_minutes = arc_routing_control_config.value.timeout_minutes
+                    }
+                  }
+                  dynamic "aurora_provisioned_scaling_config" {
+                    for_each = step.value.aurora_provisioned_scaling_config != null ? step.value.aurora_provisioned_scaling_config : []
+                    content {
+                      cross_account_role           = aurora_provisioned_scaling_config.value.cross_account_role
+                      external_id                  = aurora_provisioned_scaling_config.value.external_id
+                      global_cluster_identifier    = aurora_provisioned_scaling_config.value.global_cluster_identifier
+                      instance_arns                = aurora_provisioned_scaling_config.value.instance_arns
+                      region_database_cluster_arns = aurora_provisioned_scaling_config.value.region_database_cluster_arns
+                      timeout_minutes              = aurora_provisioned_scaling_config.value.timeout_minutes
+                    }
+                  }
+                  dynamic "aurora_serverless_scaling_config" {
+                    for_each = step.value.aurora_serverless_scaling_config != null ? step.value.aurora_serverless_scaling_config : []
+                    content {
+                      cross_account_role           = aurora_serverless_scaling_config.value.cross_account_role
+                      external_id                  = aurora_serverless_scaling_config.value.external_id
+                      global_cluster_identifier    = aurora_serverless_scaling_config.value.global_cluster_identifier
+                      region_database_cluster_arns = aurora_serverless_scaling_config.value.region_database_cluster_arns
+                      target_percent               = aurora_serverless_scaling_config.value.target_percent
+                      timeout_minutes              = aurora_serverless_scaling_config.value.timeout_minutes
                     }
                   }
                   dynamic "custom_action_lambda_config" {
@@ -420,7 +503,46 @@ resource "aws_arcregionswitch_plan" "arcregionswitch_plans" {
                       }
                     }
                   }
+                  dynamic "lambda_event_source_mapping_config" {
+                    for_each = step.value.lambda_event_source_mapping_config != null ? step.value.lambda_event_source_mapping_config : []
+                    content {
+                      action = lambda_event_source_mapping_config.value.action
+                      dynamic "region_event_source_mapping" {
+                        for_each = lambda_event_source_mapping_config.value.region_event_source_mapping != null ? lambda_event_source_mapping_config.value.region_event_source_mapping : []
+                        content {
+                          arn                = region_event_source_mapping.value.arn
+                          cross_account_role = region_event_source_mapping.value.cross_account_role
+                          external_id        = region_event_source_mapping.value.external_id
+                          region             = region_event_source_mapping.value.region
+                        }
+                      }
+                      timeout_minutes = lambda_event_source_mapping_config.value.timeout_minutes
+                      dynamic "ungraceful" {
+                        for_each = lambda_event_source_mapping_config.value.ungraceful != null ? lambda_event_source_mapping_config.value.ungraceful : []
+                        content {
+                          behavior = ungraceful.value.behavior
+                        }
+                      }
+                    }
+                  }
                   name = step.value.name
+                  dynamic "neptune_global_database_config" {
+                    for_each = step.value.neptune_global_database_config != null ? step.value.neptune_global_database_config : []
+                    content {
+                      behavior                     = neptune_global_database_config.value.behavior
+                      cross_account_role           = neptune_global_database_config.value.cross_account_role
+                      external_id                  = neptune_global_database_config.value.external_id
+                      global_cluster_identifier    = neptune_global_database_config.value.global_cluster_identifier
+                      region_database_cluster_arns = neptune_global_database_config.value.region_database_cluster_arns
+                      timeout_minutes              = neptune_global_database_config.value.timeout_minutes
+                      dynamic "ungraceful" {
+                        for_each = neptune_global_database_config.value.ungraceful != null ? neptune_global_database_config.value.ungraceful : []
+                        content {
+                          ungraceful = ungraceful.value.ungraceful
+                        }
+                      }
+                    }
+                  }
                   dynamic "rds_create_cross_region_read_replica_config" {
                     for_each = step.value.rds_create_cross_region_read_replica_config != null ? step.value.rds_create_cross_region_read_replica_config : []
                     content {
